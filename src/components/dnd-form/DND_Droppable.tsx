@@ -34,6 +34,9 @@ export function Droppable({
               key={item._id}
               id={item._id}
               setItems={setItems}
+              setActiveItem={(_: any) => {
+                setActiveItem(item);
+              }}
             >
               <Field
                 onClick={(_: any) => {

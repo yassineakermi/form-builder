@@ -31,6 +31,7 @@ export function Sortable(props: any) {
       <button
         style={{ textShadow: "rgba(0, 0, 0, 0.12) 0px -1px 0px;" }}
         className="items-center w-fit bg-sky-400 text-white cursor-move flex text-[0.75rem] h-full  relative text-center whitespace-nowrap  p-3 border-sky-400  border-[0.06rem]"
+        onMouseDown={(_) => props?.onClick(_, props?.id)}
       >
         <span className="relative " style={{ scale: 2 }}>
           <svg

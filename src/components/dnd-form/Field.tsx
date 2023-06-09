@@ -1,3 +1,4 @@
+import generateId from "@/utils/generate_id";
 import React from "react";
 
 function Field(props: any) {
@@ -84,8 +85,10 @@ function Field(props: any) {
           </label>
           <select id="select" className="border  p-1 text-[0.75rem] flex-1">
             <option value="">Select an option</option>
-            {options.map((option: string) => (
-              <option value={option}>{option}</option>
+            {options.map((option: string, index: number) => (
+              <option key={index} value={option}>
+                {option}
+              </option>
             ))}
           </select>
         </div>
@@ -185,8 +188,9 @@ function Field(props: any) {
 
   return (
     <div
-      onMouseDown={(_) => props?.onClick(_, props?.id)}
+      onMouseDown={(_: any) => props?.onClick(_, props?.id)}
       className="py-1 flex flex-1"
+      key={new Date().getMilliseconds().toString()}
     >
       {inputField}
     </div>
