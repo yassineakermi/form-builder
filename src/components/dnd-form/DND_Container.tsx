@@ -1,13 +1,22 @@
 import React, { useState } from "react";
-import { DndContext, closestCenter, rectIntersection } from "@dnd-kit/core";
+import { DndContext, rectIntersection } from "@dnd-kit/core";
 import { Droppable } from "./DND_Droppable";
 import { Draggable } from "./DND_Draggable";
 import { arrayMove } from "@dnd-kit/sortable";
 import generateId from "@/utils/generate_id";
 import { ItemType } from "./Types";
-
+import getFieldOptions from "@/utils/getFieldOptions";
+import SideMenu from "./SideMenu";
+import { FieldOptions } from "./SideMenu";
 export default function DNDContainer() {
-  const [items, setItems] = useState<ItemType[]>([]);
+  const [items, setItems] = useState<FieldOptions[]>([]);
+  const [activeItem, setActiveItem] = useState<FieldOptions>();
+
+  const deleteItem = (item_id: string) => {
+    const newItems = items.filter((item) => item._id != item_id);
+    setItems(newItems);
+    console.log(newItems);
+  };
   return (
     <DndContext onDragEnd={handleDragEnd} collisionDetection={rectIntersection}>
       <div className="flex w-fit gap-2 mx-auto mt-[100px]">
@@ -444,7 +453,15 @@ export default function DNDContainer() {
             </>
           </Draggable>
         </div>
-        <Droppable items={items} />
+        <Droppable
+          activeItem={activeItem?._id ? activeItem?._id : ""}
+          setActiveItem={setActiveItem}
+          items={items}
+          setItems={deleteItem}
+        />
+        {activeItem && (
+          <SideMenu fieldOptions={activeItem} setActiveItem={setActiveItem} />
+        )}
       </div>
     </DndContext>
   );
@@ -455,7 +472,9 @@ export default function DNDContainer() {
       const newItem = {
         _id: generateId(),
         type: active?.id,
+        ...getFieldOptions(active?.id),
       };
+      console.log(newItem);
       setItems([...items, newItem]);
     }
 

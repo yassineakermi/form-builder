@@ -9,19 +9,41 @@ import { Sortable } from "./DND_Sortable";
 import { ItemType } from "./Types";
 interface DroppableProps {
   items?: ItemType[];
+  activeItem: string;
+  setActiveItem: any;
+  setItems: any;
 }
 
-export function Droppable({ items = [] }: DroppableProps) {
-  const [activeItem, setActiveItem] = useState("");
-
+export function Droppable({
+  items = [],
+  activeItem = "",
+  setActiveItem = (_: any) => {},
+  setItems = (_: any) => {},
+}: DroppableProps) {
   return (
-    <SortableContext items={items.map(item=>item._id)} strategy={verticalListSortingStrategy}>
-      <div className="flex flex-col w-[500px] h-[364px] items-center py-[5%] px-[10px] border border-gray-300 overflow-scroll">
+    <SortableContext
+      items={items.map((item) => item._id)}
+      strategy={verticalListSortingStrategy}
+    >
+      <div className="flex flex-col w-[500px] h-[364px] items-center py-[16px] px-[10px] border border-gray-300 overflow-y-scroll">
         {!items.length && <p>Drop elements here!</p>}
-        {items.map((item,id) => {
+        {items.map((item) => {
           return (
-            <Sortable clickedId={activeItem}  key={item._id} id={item._id}>
-                <Field onClick={(_: any,id:string)=>{console.log('clicked');setActiveItem(item._id)}} id={item._id} key={item._id} widget={item.type} />
+            <Sortable
+              clickedId={activeItem}
+              key={item._id}
+              id={item._id}
+              setItems={setItems}
+            >
+              <Field
+                onClick={(_: any) => {
+                  setActiveItem(item);
+                }}
+                id={item._id}
+                key={item._id}
+                widget={item.type}
+                item={item}
+              />
             </Sortable>
           );
         })}
